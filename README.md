@@ -1,7 +1,7 @@
 go-aws-auth
 ===========
 
-[![GoDoc](https://godoc.org/github.com/smartystreets/go-aws-auth?status.svg)](http://godoc.org/github.com/smartystreets/go-aws-auth)
+[![GoDoc](https://godoc.org/github.com/opencoff/go-aws-auth?status.svg)](http://godoc.org/github.com/opencoff/go-aws-auth)
 
 Go-AWS-Auth is a comprehensive, lightweight library for signing requests to Amazon Web Services.
 
@@ -26,11 +26,11 @@ For more info about AWS authentication, see the [comprehensive docs](http://docs
 
 Go get it:
 
-	$ go get github.com/smartystreets/go-aws-auth
+	$ go get github.com/opencoff/go-aws-auth
 	
 Then import it:
 
-	import "github.com/smartystreets/go-aws-auth"
+	import "github.com/opencoff/go-aws-auth"
 
 
 ### Using your AWS Credentials
@@ -69,6 +69,36 @@ req, err := http.NewRequest("GET", url, nil)
 awsauth.Sign(req)  // Automatically chooses the best signing mechanism for the service
 
 resp, err := client.Do(req)
+```
+
+### Pre-Signing URLs
+
+Prepare information required for the presigned URL and call
+`SignURL()`:
+
+```go
+
+presign := &Presign{
+            Method: "GET",
+            SignedHeaders: make(http.Header),
+            ContentSHA256: "",
+            Date: time.Now().UTC(),
+            Expires: 86400 * time.Second,
+}
+
+u := &url.URL{
+        Host: "mybucket.s3.amazonaws.com",
+        Path: "/folder/object.txt",
+        Scheme: "https",
+}
+
+    u, sign := awsauth.SignURL(presign, u, awsauth.Credential{
+                        AccessKeyID: "my Access key id",
+                        SecretAccessKey: "my secret access key",
+    })
+
+    // use u.Encode() as the pre-signed URL.
+
 ```
 
 You can use `Sign` to have the library choose the best signing algorithm depending on the service, or you can specify it manually if you know what you need:

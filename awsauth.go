@@ -37,6 +37,23 @@ func Sign(request *http.Request, credentials ...Credentials) *http.Request {
 	return nil
 }
 
+
+// SignURL pre-signs a URL with version 4 scheme and returns a new
+// URL
+func SignURL(ps *Presign, u *url.URL, c ...Credentials) (*url.URL, string) {
+	service, _ := serviceAndRegion(u.Host)
+	signVersion := awsSignVersion[service]
+
+	switch signVersion {
+	case 4:
+		return Sign4URL(ps, u, c...)
+
+	default:
+	}
+	return nil, ""
+}
+
+
 // Sign4 signs a request with Signed Signature Version 4.
 func Sign4(request *http.Request, credentials ...Credentials) *http.Request {
 	keys := chooseKeys(credentials)

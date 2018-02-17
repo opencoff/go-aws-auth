@@ -115,3 +115,4 @@ func tsDateV4(timestamp string) string {
 }
 
 const timeFormatV4 = "20060102T150405Z"
+const dateFormatV4 = "20060102"
