@@ -181,4 +181,4 @@ func qhmac(key, data []byte) []byte {
 	return h.Sum(nil)
 }
 
-
+// vim: noexpandtab:sw=8:ts=8:tw=98:
