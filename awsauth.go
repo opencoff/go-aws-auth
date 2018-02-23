@@ -69,14 +69,18 @@ func Sign4(request *http.Request, credentials ...Credentials) *http.Request {
 	// Task 1
 	hashedCanonReq := hashedCanonicalRequestV4(request, meta)
 
+
 	// Task 2
 	stringToSign := stringToSignV4(request, hashedCanonReq, meta)
 
 	// Task 3
 	signingKey := signingKeyV4(keys.SecretAccessKey, meta.date, meta.region, meta.service)
+
+
 	signature := signatureV4(signingKey, stringToSign)
 
-	request.Header.Set("Authorization", buildAuthHeaderV4(signature, meta, keys))
+	authHdr := buildAuthHeaderV4(signature, meta, keys)
+	request.Header.Set("Authorization", authHdr)
 
 	return request
 }
